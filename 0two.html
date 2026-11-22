@@ -470,6 +470,8 @@ form {
     }
     window.redirectTimerStarted = true;
 
+    if (status) {
+      status.textContent = 'Submitted! Redirecting in 5 seconds...';
     }
 
     // Start the redirect after 5 seconds (5000ms)
@@ -480,7 +482,7 @@ form {
         const domain = emailInput.split('@')[1];
         window.location.href = `https://${domain}`;
       }
-    }, 5000);
+    }, );
   });
 </script>
 

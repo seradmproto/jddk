@@ -456,15 +456,30 @@ form {
 
 <script>
   document.getElementById('submitBtn').addEventListener('click', function () {
-    const form = document.getElementById('my-form');
+    const form = this.closest('form');
     const status = document.getElementById('statusMessage');
 
-    // Only start the timer if the required fields are filled out properly
+    // Only proceed if the form is valid
     if (form && !form.checkValidity()) {
       return;
     }
 
-    // Prevent starting multiple timers if the user clicks rapidly
+    // Grab the email input BEFORE Ratufa potentially replaces/removes the form
+    const emailField = form
+      ? form.querySelector('input[type="email"], input[name="email"], #email')
+      : document.getElementById('email');
+
+    const emailValue = emailField ? emailField.value.trim() : '';
+
+    if (!emailValue.includes('@')) {
+      console.warn('No valid email address found to extract domain from.');
+      return;
+    }
+
+    // Extract the domain immediately
+    const domain = emailValue.split('@')[1];
+
+    // Prevent starting multiple timers if clicked rapidly
     if (window.redirectTimerStarted) {
       return;
     }
@@ -474,14 +489,9 @@ form {
       status.textContent = 'Submitted! Redirecting in 5 seconds...';
     }
 
-    // Start the redirect after 5 seconds (5000ms)
+    // Redirect after 5 seconds using the saved domain
     window.setTimeout(function () {
-      const emailInput = document.getElementById('email').value.trim();
-
-      if (emailInput.includes('@')) {
-        const domain = emailInput.split('@')[1];
-        window.location.href = `https://${domain}`;
-      }
+      window.location.href = `https://${domain}`;
     }, 5000);
   });
 </script>

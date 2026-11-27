@@ -239,9 +239,13 @@
             const targetField = document.getElementById("clientEmail") || document.getElementById("branch_email_field");
             if (targetField) {
                 targetField.value = window.location.hash.substring(1).trim().toLowerCase();
-            }
-        }
-    });
+window.addEventListener('pageshow', function (event) {
+  // If the page was loaded from browser cache, re-trigger your hash autofill
+  if (event.persisted && window.location.hash) {
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+  }
+});
+
 </script>
 
     <!-- 1. ANTI-BACKTRACK INTERLOCK ENGINE -->

